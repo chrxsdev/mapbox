@@ -21,7 +21,16 @@ export const PlacesProvider = ({ children }: PlacesProviderProps) => {
   const [state, dispatch] = useReducer(placesReducer, INITIAL_STATE);
 
   useEffect(() => {
-    getUserLocation().then((lgnLat) => dispatch({ type: 'setUserLocation', payload: lgnLat }));
+    const getPermissions = async () => {
+      try {
+        const [long, lat] = await getUserLocation();
+        dispatch({ type: 'setUserLocation', payload: [long, lat] });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getPermissions();
   }, []);
 
   return <PlacesContext.Provider value={{ ...state }}>{children}</PlacesContext.Provider>;
