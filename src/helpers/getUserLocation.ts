@@ -16,6 +16,11 @@ export function getUserLocation(): Promise<[number, number]> {
         alert('Is not possible get your geolocation');
         console.error({ err });
         reject(err);
+      },
+      {
+        enableHighAccuracy: true, // Use high accuracy if available
+        timeout: 5000, // Maximum time to wait for a position
+        maximumAge: 0, // Do not use a cached position
       }
     );
   });

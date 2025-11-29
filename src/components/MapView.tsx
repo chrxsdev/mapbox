@@ -16,7 +16,7 @@ export const MapView = () => {
         container: mapDiv.current!, // container ID
         style: 'mapbox://styles/mapbox/streets-v12', // style URL
         center: userLocation, // starting position [lng, lat]
-        zoom: 8, // starting zoom
+        zoom: 9, // starting zoom
       });
     }
   }, [isLoading]);
@@ -27,7 +27,7 @@ export const MapView = () => {
     <div
       ref={mapDiv}
       style={{
-        backgroundColor: 'red',
+        backgroundColor: 'gray',
         height: '100vh',
         width: '100vw',
         position: 'fixed',
