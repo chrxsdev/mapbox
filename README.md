@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Maps App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application featuring interactive maps powered by Mapbox GL. This app demonstrates modern React patterns with TypeScript, including context API for state management, geolocation services, and dynamic map interactions.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive Maps**: Browse and interact with maps using Mapbox GL
+- **Geolocation**: Get user's current location with high accuracy
+- **Responsive Design**: Mobile-friendly interface with Bootstrap 5
+- **Type Safety**: Full TypeScript support for better developer experience
+- **Fast Development**: Hot Module Replacement (HMR) with Vite
 
-## React Compiler
+## Technologies
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **React 19**: Latest version with improved performance and features
+- **TypeScript**: Static typing for better code quality and IDE support
+- **Vite**: Next-generation frontend tooling for fast builds and HMR
+- **Mapbox GL**: WebGL-powered vector maps and geospatial analysis
+- **Bootstrap 5**: Modern responsive CSS framework for UI components
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── apis/          # External API integrations and services
+├── components/    # Reusable React components
+├── config/        # App configuration (Mapbox tokens, settings)
+├── context/       # React Context providers for state management
+├── helpers/       # Utility functions (geolocation, formatting)
+├── interfaces/    # TypeScript type definitions and interfaces
+├── screens/       # Main application views/pages
+└── MapsApp.tsx    # Root application component
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js (v18 or higher)
+- Yarn package manager
+- Mapbox API token (get one at [mapbox.com](https://www.mapbox.com))
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+yarn install
 ```
+
+3. Set up your Mapbox token in the configuration file
+
+### Development
+
+```bash
+# Run development server (default: http://localhost:5173)
+yarn dev
+
+# Build for production
+yarn build
+
+# Preview production build locally
+yarn preview
+
+# Run ESLint to check code quality
+yarn lint
+```
+
+## Usage
+
+1. Allow browser location access when prompted
+2. The map will center on your current location
+3. Interact with the map using mouse/touch gestures:
+   - Drag to pan
+   - Scroll to zoom
+   - Double-click to zoom in
+   - Right-click drag to rotate
