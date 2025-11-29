@@ -1,9 +1,7 @@
+import { MapsApp } from './MapsApp';
+
 function App() {
-  return (
-    <div>
-      <h1>Hello, world!</h1>
-    </div>
-  );
+  return <MapsApp />;
 }
 
 export default App;
