@@ -26,7 +26,7 @@ export const PlacesProvider = ({ children }: PlacesProviderProps) => {
         const [long, lat] = await getUserLocation();
         dispatch({ type: 'setUserLocation', payload: [long, lat] });
       } catch (error) {
-        console.error(error);
+        console.error({ error });
       }
     };
 
