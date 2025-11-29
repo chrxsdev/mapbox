@@ -1,4 +1,4 @@
-import { useReducer,  type JSX } from 'react';
+import { useReducer, type JSX } from 'react';
 import type { Map } from 'mapbox-gl';
 import { MapContext } from './MapContext';
 import { mapReducer } from './mapReducer';
@@ -18,7 +18,11 @@ interface MapProviderProps {
 }
 
 export const MapProvider = ({ children }: MapProviderProps) => {
-  const [state] = useReducer(mapReducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(mapReducer, INITIAL_STATE);
 
-  return <MapContext.Provider value={{ ...state }}>{children}</MapContext.Provider>;
+  const setMap = (map: Map) => {
+    dispatch({ type: 'setMap', payload: map });
+  };
+
+  return <MapContext.Provider value={{ ...state, setMap }}>{children}</MapContext.Provider>;
 };
