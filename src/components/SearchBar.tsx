@@ -1,5 +1,6 @@
 import { useContext, useRef } from 'react';
 import { PlacesContext } from '../context';
+import { SearchResults } from './SearchResults';
 
 export const SearchBar = () => {
   const { searchPlacesbyTerm } = useContext(PlacesContext);
@@ -12,12 +13,13 @@ export const SearchBar = () => {
 
     debounceRef.current = setTimeout(() => {
       searchPlacesbyTerm(e.target.value);
-    }, 1000);
+    }, 500);
   };
 
   return (
     <div className='search-container'>
       <input type='text' className='form-control' placeholder='Search a place...' onChange={onQueryChanged} />
+      <SearchResults />
     </div>
   );
 };
