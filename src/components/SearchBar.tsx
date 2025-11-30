@@ -1,6 +1,9 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
+import { PlacesContext } from '../context';
 
 export const SearchBar = () => {
+  const { searchPlacesbyTerm } = useContext(PlacesContext);
+
   const debounceRef = useRef<number | null>(null);
 
   // Applying debouce for better performance
@@ -8,8 +11,7 @@ export const SearchBar = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(() => {
-      // todo: make the requests
-      console.log('Searching place:', e.target.value);
+      searchPlacesbyTerm(e.target.value);
     }, 1000);
   };
 
