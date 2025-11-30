@@ -40,7 +40,10 @@ export const PlacesProvider = ({ children }: PlacesProviderProps) => {
   }, []);
 
   const searchPlacesbyTerm = async (query: string): Promise<Feature[]> => {
-    if (query.length === 0) return [];
+    if (query.length === 0) {
+      dispatch({ type: 'savePlaces', payload: [] });
+      return [];
+    }
     if (state.userLocation === undefined) throw new Error('User location is not defined');
 
     // Set loading state

@@ -8,6 +8,10 @@ export const SearchResults = () => {
     return <div className='alert alert-info mt-3'>Searching places...</div>;
   }
 
+  if (places.length === 0) {
+    return <></>;
+  }
+
   return (
     <ul className='list-group mt-3'>
       {places.map((place) => (
