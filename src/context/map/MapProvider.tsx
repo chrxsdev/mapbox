@@ -66,12 +66,7 @@ export const MapProvider = ({ children }: MapProviderProps) => {
     dispatch({ type: 'setMap', payload: map });
   };
 
-  const getRouteBetweenPoints = async (start: [number, number], end: [number, number]) => {
-    const resp = await directionsApi.get<DirectionsResponse>(`/${start.join(',')};${end.join(',')}`);
-
-    const { geometry } = resp.data.routes[0];
-    const { coordinates: coords } = geometry;
-
+  const fitBounds = (start: [number, number], coords: number[][]) => {
     // Bounds
     const bounds = new LngLatBounds(start, start);
 
@@ -83,7 +78,9 @@ export const MapProvider = ({ children }: MapProviderProps) => {
     state.map?.fitBounds(bounds, {
       padding: 100,
     });
+  };
 
+  const drawPolyline = (coords: number[][]) => {
     // Defining the Polyline
     const sourceData: SourceSpecification = {
       type: 'geojson',
@@ -123,6 +120,19 @@ export const MapProvider = ({ children }: MapProviderProps) => {
         'line-width': 5,
       },
     });
+  };
+
+  const getRouteBetweenPoints = async (start: [number, number], end: [number, number]) => {
+    const resp = await directionsApi.get<DirectionsResponse>(`/${start.join(',')};${end.join(',')}`);
+
+    const { geometry } = resp.data.routes[0];
+    const { coordinates: coords } = geometry;
+
+    // Bounds
+    fitBounds(start, coords);
+
+    // Draw polyline
+    drawPolyline(coords);
   };
 
   return <MapContext.Provider value={{ ...state, setMap, getRouteBetweenPoints }}>{children}</MapContext.Provider>;
