@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useReducer, type JSX } from 'react';
-import { Marker, Popup, type Map } from 'mapbox-gl';
+import { LngLatBounds, Marker, Popup, type Map, type SourceSpecification } from 'mapbox-gl';
 import { MapContext } from './MapContext';
 import { mapReducer } from './mapReducer';
 import { PlacesContext } from '../';
+import { directionsApi } from '../../apis';
+import type { DirectionsResponse } from '../../interfaces/DirectionsResponse';
 
 export interface MapState {
   isMapReady: boolean;
@@ -64,5 +66,64 @@ export const MapProvider = ({ children }: MapProviderProps) => {
     dispatch({ type: 'setMap', payload: map });
   };
 
-  return <MapContext.Provider value={{ ...state, setMap }}>{children}</MapContext.Provider>;
+  const getRouteBetweenPoints = async (start: [number, number], end: [number, number]) => {
+    const resp = await directionsApi.get<DirectionsResponse>(`/${start.join(',')};${end.join(',')}`);
+
+    const { geometry } = resp.data.routes[0];
+    const { coordinates: coords } = geometry;
+
+    // Bounds
+    const bounds = new LngLatBounds(start, start);
+
+    for (const coord of coords) {
+      bounds.extend(coord as [number, number]);
+    }
+
+    // Draw the polyline and fit bounds
+    state.map?.fitBounds(bounds, {
+      padding: 100,
+    });
+
+    // Defining the Polyline
+    const sourceData: SourceSpecification = {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: coords,
+            },
+          },
+        ],
+      },
+    };
+
+    // Removing previous route if exists, the layer and source must have the same id
+    if (state.map?.getLayer('RouteString')) {
+      state.map.removeLayer('RouteString');
+      state.map.removeSource('RouteString');
+    }
+
+    // Adding the polyline to the map source
+    state.map?.addSource('RouteString', sourceData);
+    state.map?.addLayer({
+      id: 'RouteString',
+      type: 'line',
+      source: 'RouteString',
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round',
+      },
+      paint: {
+        'line-color': 'black',
+        'line-width': 5,
+      },
+    });
+  };
+
+  return <MapContext.Provider value={{ ...state, setMap, getRouteBetweenPoints }}>{children}</MapContext.Provider>;
 };

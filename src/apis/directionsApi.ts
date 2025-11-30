@@ -2,10 +2,12 @@ import axios from 'axios';
 import { config } from '../config/env';
 
 const searchApi = axios.create({
-  baseURL: config.mapbox.searchUrl,
+  baseURL: config.mapbox.directionsUrl,
   params: {
-    limit: 5,
-    language: 'es',
+    alternatives: false,
+    geometries: 'geojson',
+    overview: 'simplified',
+    steps: false,
     access_token: config.mapbox.token,
   },
   headers: { 'Content-Type': 'application/json' },

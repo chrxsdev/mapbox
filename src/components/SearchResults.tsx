@@ -4,8 +4,8 @@ import type { Feature } from '../interfaces/MapResponse';
 
 export const SearchResults = () => {
   const [activeId, setActiveId] = useState<string | null>('');
-  const { places, isLoadingPlaces } = useContext(PlacesContext);
-  const { map } = useContext(MapContext);
+  const { places, isLoadingPlaces, userLocation } = useContext(PlacesContext);
+  const { map, getRouteBetweenPoints } = useContext(MapContext);
 
   const onPlaceClick = (place: Feature) => {
     const [lng, lat] = place.center;
@@ -17,6 +17,17 @@ export const SearchResults = () => {
       zoom: 14,
       center: [lng, lat],
     });
+  };
+
+  const onGetRouteClick = (place: Feature) => {
+    if (!userLocation) return;
+
+    
+
+    const [lng, lat] = place.center;
+
+    // Getting from the user location to the place location when user clicked the button
+    getRouteBetweenPoints(userLocation, [lng, lat]);
   };
 
   if (isLoadingPlaces) {
@@ -43,7 +54,16 @@ export const SearchResults = () => {
           >
             {place.place_name}
           </p>
-          <button className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary'}`}>Get Address</button>
+          <button
+            className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary'}`}
+            onClick={(e) => {
+              // Prevent the li onClick from being triggered
+              e.stopPropagation();
+              onGetRouteClick(place);
+            }}
+          >
+            Get Address
+          </button>
         </li>
       ))}
     </ul>
